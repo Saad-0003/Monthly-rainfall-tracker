@@ -1,45 +1,84 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
-int main()
-{
+int main() {
     const int daysPerWeek = 7;
     const int weeks = 4;
     double totalRainfall = 0;
     double weeklyTotal = 0;
     double maxRainfall = 0;
-    int maxRainfallWeek = 0;
-    int maxRainfallDay = 0;
-
-    for (int week = 1; week <= weeks; ++week)
-    {
-        cout << "\nEnter rainfall data for Week " << week << ":\n";
+    double minRainfall = 999999; // Large number to find minimum
+    int maxRainfallWeek = 0, maxRainfallDay = 0;
+    int minRainfallWeek = 0, minRainfallDay = 0;
+    
+    // Display header
+    cout << "\n========================================\n";
+    cout << "        RAINFALL DATA TRACKER\n";
+    cout << "========================================\n\n";
+    
+    // Collect data
+    for (int week = 1; week <= weeks; ++week) {
+        cout << "Enter rainfall data for Week " << week << ":\n";
+        cout << "--------------------------------\n";
         weeklyTotal = 0;
-
-        for (int day = 1; day <= daysPerWeek; ++day)
-        {
+        
+        for (int day = 1; day <= daysPerWeek; ++day) {
             double dailyRainfall;
             cout << "  Day " << day << ": ";
             cin >> dailyRainfall;
-
+            
+            // Input validation
+            while (dailyRainfall < 0) {
+                cout << "  Invalid! Enter non-negative value: ";
+                cin >> dailyRainfall;
+            }
+            
             weeklyTotal += dailyRainfall;
             totalRainfall += dailyRainfall;
-
-            if (dailyRainfall > maxRainfall)
-            {
+            
+            // Track maximum
+            if (dailyRainfall > maxRainfall) {
                 maxRainfall = dailyRainfall;
                 maxRainfallWeek = week;
                 maxRainfallDay = day;
             }
+            
+            // Track minimum
+            if (dailyRainfall < minRainfall) {
+                minRainfall = dailyRainfall;
+                minRainfallWeek = week;
+                minRainfallDay = day;
+            }
         }
-
+        
         double weeklyAverage = weeklyTotal / daysPerWeek;
-        cout << "  Average rainfall for Week " << week << ": " << weeklyAverage << " units\n";
+        cout << "\n  Weekly Total: " << fixed << setprecision(2) << weeklyTotal << " units";
+        cout << "\n  Weekly Average: " << weeklyAverage << " units\n";
+        cout << "--------------------------------\n\n";
     }
-
-    cout << "\n*** Rainfall Statistics ***\n";
-    cout << "1. Total rainfall for the month: " << totalRainfall << " units\n";
-    cout << "2. Maximum rainfall: " << maxRainfall << " units, on Week " << maxRainfallWeek << ", Day " << maxRainfallDay << "\n";
-   
+    
+    // Calculate monthly average
+    double monthlyAverage = totalRainfall / (weeks * daysPerWeek);
+    
+    // Display final results
+    cout << "========================================\n";
+    cout << "           RAINFALL SUMMARY\n";
+    cout << "========================================\n\n";
+    
+    cout << "MONTHLY STATISTICS:\n";
+    cout << "- Total rainfall: " << totalRainfall << " units\n";
+    cout << "- Average per day: " << monthlyAverage << " units\n\n";
+    
+    cout << "EXTREME VALUES:\n";
+    cout << "- Maximum rainfall: " << maxRainfall << " units\n";
+    cout << "  (Week " << maxRainfallWeek << ", Day " << maxRainfallDay << ")\n";
+    cout << "- Minimum rainfall: " << minRainfall << " units\n";
+    cout << "  (Week " << minRainfallWeek << ", Day " << minRainfallDay << ")\n\n";
+    
+    cout << "========================================\n";
+    cout << "Thank you for using Rainfall Tracker!\n";
+    cout << "========================================\n\n";
+    
     return 0;
 }
